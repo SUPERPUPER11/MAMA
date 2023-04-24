@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TrenirovkaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Agents">
+    <Key>
+      <PropertyRef Name="Id_agents" />
+    </Key>
+    <Property Name="Id_agents" Type="Int32" Nullable="false" />
+    <Property Name="Id_typeag" Type="Int32" />
+    <Property Name="Gmail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Logo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Adress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Prioretet" Type="Int32" />
+    <Property Name="FIO" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Inn" Type="Int32" />
+    <Property Name="Kpp" Type="Int32" />
+    <Property Name="Role_id" Type="Int32" />
+    <NavigationProperty Name="Role" Relationship="Self.FK_Agents_Role" FromRole="Agents" ToRole="Role" />
+    <NavigationProperty Name="Type_agents" Relationship="Self.FK_Agents_Type_agents" FromRole="Agents" ToRole="Type_agents" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="Id_role" />
+    </Key>
+    <Property Name="Id_role" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Agents" Relationship="Self.FK_Agents_Role" FromRole="Role" ToRole="Agents" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Type_agents">
+    <Key>
+      <PropertyRef Name="Type_id" />
+    </Key>
+    <Property Name="Type_id" Type="Int32" Nullable="false" />
+    <Property Name="Name_type" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Agents" Relationship="Self.FK_Agents_Type_agents" FromRole="Type_agents" ToRole="Agents" />
+  </EntityType>
+  <Association Name="FK_Agents_Role">
+    <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
+    <End Role="Agents" Type="Self.Agents" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="Id_role" />
+      </Principal>
+      <Dependent Role="Agents">
+        <PropertyRef Name="Role_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Agents_Type_agents">
+    <End Role="Type_agents" Type="Self.Type_agents" Multiplicity="0..1" />
+    <End Role="Agents" Type="Self.Agents" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Type_agents">
+        <PropertyRef Name="Type_id" />
+      </Principal>
+      <Dependent Role="Agents">
+        <PropertyRef Name="Id_typeag" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="TrenirovkaEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Agents" EntityType="Self.Agents" />
+    <EntitySet Name="Role" EntityType="Self.Role" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="Type_agents" EntityType="Self.Type_agents" />
+    <AssociationSet Name="FK_Agents_Role" Association="Self.FK_Agents_Role">
+      <End Role="Role" EntitySet="Role" />
+      <End Role="Agents" EntitySet="Agents" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Agents_Type_agents" Association="Self.FK_Agents_Type_agents">
+      <End Role="Type_agents" EntitySet="Type_agents" />
+      <End Role="Agents" EntitySet="Agents" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
